@@ -1,13 +1,14 @@
 package com.example.bilbackend.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Data
@@ -35,5 +36,13 @@ public class User {
     private String email;
 
     private String password;
+
+    @ManyToOne
+    @JoinColumn (name = "company", referencedColumnName = "id")
+    private Company company;
+
+    @OneToMany(mappedBy="user",cascade = CascadeType.ALL)
+    @JsonBackReference
+    private List<CarAdvertisement> carAdversitementList = new ArrayList<>();
 
 }

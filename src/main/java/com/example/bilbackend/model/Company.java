@@ -37,10 +37,9 @@ public class Company {
 
     @OneToMany(mappedBy = "company")
     @JsonBackReference
-    private Set<CarAdvertisement> carAdvertisementSet=new HashSet<>();
+    private Set<CarAdvertisement> carAdvertisements = new HashSet<>();
 
-
-
-
-
+    @OneToMany(mappedBy = "company")
+    @JsonBackReference
+    private Set<User> users = new HashSet<>();
 }

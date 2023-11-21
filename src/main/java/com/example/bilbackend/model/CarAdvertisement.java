@@ -59,5 +59,9 @@ public class CarAdvertisement {
     @JoinColumn(name = "company", referencedColumnName = "id")
     private Company company;
 
+    @ManyToOne
+    @JoinColumn(name = "user", referencedColumnName = "id")
+    private User user;
+
 }
 
