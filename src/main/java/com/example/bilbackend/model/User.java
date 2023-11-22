@@ -15,7 +15,6 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
 @Entity //Føres til databasen
 public class User {
 
@@ -24,18 +23,12 @@ public class User {
     private int id;
 
     private String userName;
-
-    private String firstName;
-
-    private String lastName;
-
-    private String city;
-
-    private int phoneNumber;
-
-    private String email;
-
     private String password;
+    private String firstName;
+    private String lastName;
+    private String city;
+    private int phoneNumber;
+    private String email;
 
     @ManyToOne
     @JoinColumn (name = "company", referencedColumnName = "id")
@@ -44,5 +37,6 @@ public class User {
     @OneToMany(mappedBy="user",cascade = CascadeType.ALL)
     @JsonBackReference
     private List<CarAdvertisement> carAdversitementList = new ArrayList<>();
+
 
 }

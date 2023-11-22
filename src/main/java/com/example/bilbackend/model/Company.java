@@ -17,22 +17,16 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Company {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     private String name;
-
     private String description;
-
     private String address;
-
     private int phoneNumber;
-
-    private String website;
-
-    private String logo;
-
+    private String websiteUrl;
+    private String logoImageUrl;
     private int cvr;
 
     @OneToMany(mappedBy = "company")
