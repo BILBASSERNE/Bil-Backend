@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CarImage {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -20,6 +21,6 @@ public class CarImage {
 
 
     @ManyToOne
-    @JoinColumn(name = "car_advertisment",referencedColumnName = "id")
+    @JoinColumn(name = "carAdvertisement",referencedColumnName = "id")
     private CarAdvertisement carAdvertisement;
 }
