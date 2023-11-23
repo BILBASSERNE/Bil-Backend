@@ -1,35 +1,26 @@
 package com.example.bilbackend.controller;
 
 import com.example.bilbackend.model.CarAdvertisement;
-import com.example.bilbackend.repositories.CarAdvertisementRepository;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.bilbackend.repository.CarAdvertisementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.lang.reflect.Field;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:63342")
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@CrossOrigin
 public class CarAdvertisementController {
 
-    @Autowired
-    private CarAdvertisementRepository carAdvertisementRepository;
+   @Autowired
+   CarAdvertisementRepository carAdvertisementRepository;
 
+    @GetMapping("/bilbassen")
+    public List<CarAdvertisement> SortCarsByIdDecending() {
+        return carAdvertisementRepository.findAllByOrderByIdDesc();
+    }
     @GetMapping("/cars")
     public List<CarAdvertisement> getCars(@RequestParam String keyword) {
         return carAdvertisementRepository.findByNameContainingOrDescriptionContainingOrCarBrandContainingOrColorContainingOrGearTypeContaining(
