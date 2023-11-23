@@ -27,18 +27,13 @@ public class User implements UserDetails {
     private int id;
 
     private String userName;
-
+    private String password;
     private String firstName;
-
     private String lastName;
-
     private String city;
-
     private int phoneNumber;
-
     private String email;
 
-    private String password;
 
     @ManyToOne
     @JoinColumn (name = "company", referencedColumnName = "id")

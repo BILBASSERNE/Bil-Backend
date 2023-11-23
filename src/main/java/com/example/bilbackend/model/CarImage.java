@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CarImage {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

@@ -1,6 +1,5 @@
 package com.example.bilbackend.model;
 
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,40 +19,25 @@ public class CarAdvertisement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     private String name;
-
     private String description;
-
     private double price;
-
     private String licenseplate;
-
     private String carBrand;
-
     private int modelYear;
-
     private int boughtYear;
-
     private String fuelType;
-
     private double fuelConsumption;
-
     private String carType;
-
     private String color;
-
     private String gearType;
-
     private int numberOfGears;
-
     private double kmDriven;
-
     private boolean isActive;
 
-    @OneToMany(mappedBy="carAdvertisement",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="carAdvertisement", cascade = CascadeType.ALL)
     @JsonBackReference
-    private List<CarImage> images=new ArrayList<>();
+    private List<CarImage> images = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "company", referencedColumnName = "id")
