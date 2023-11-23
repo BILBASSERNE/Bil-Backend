@@ -51,9 +51,9 @@ public class CarAdvertisement {
 
     private boolean isActive;
 
-    @OneToMany(mappedBy="car_advertisment",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "carAdvertisement", cascade = CascadeType.ALL)
     @JsonBackReference
-    private List<CarImage> images=new ArrayList<>();
+    private List<CarImage> images = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "company", referencedColumnName = "id")

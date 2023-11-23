@@ -20,6 +20,6 @@ public class CarImage {
 
 
     @ManyToOne
-    @JoinColumn(name = "car_advertisment",referencedColumnName = "id")
+    @JoinColumn(name = "carAdvertisement",referencedColumnName = "id")
     private CarAdvertisement carAdvertisement;
 }
