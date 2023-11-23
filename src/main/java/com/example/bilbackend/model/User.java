@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 
 @Data
@@ -34,15 +32,20 @@ public class User implements UserDetails {
     private int phoneNumber;
     private String email;
 
+    @ManyToMany
+    @JoinTable(name = "favorite_cars",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "car_id"))
+    private Set<CarAdvertisement> cars = new HashSet<>();
+
 
     @ManyToOne
-    @JoinColumn (name = "company", referencedColumnName = "id")
+    @JoinColumn(name = "company", referencedColumnName = "id")
     private Company company;
 
     @OneToMany(mappedBy="user",cascade = CascadeType.ALL)
     @JsonBackReference
     private List<CarAdvertisement> carAdversitementList = new ArrayList<>();
-
 
     // no roles for authorizing user (enum - role)
     @Override
@@ -78,5 +81,29 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public Set<CarAdvertisement> getCars() {
+        return cars;
+    }
+
+    public void setCars(Set<CarAdvertisement> cars) {
+        this.cars = cars;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    public List<CarAdvertisement> getCarAdversitementList() {
+        return carAdversitementList;
+    }
+
+    public void setCarAdversitementList(List<CarAdvertisement> carAdversitementList) {
+        this.carAdversitementList = carAdversitementList;
     }
 }

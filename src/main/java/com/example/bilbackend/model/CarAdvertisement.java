@@ -8,7 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -16,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 public class CarAdvertisement {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -34,6 +37,11 @@ public class CarAdvertisement {
     private int numberOfGears;
     private double kmDriven;
     private boolean isActive;
+    private boolean isFavorited;
+
+    @ManyToMany(mappedBy = "cars")
+    @JsonBackReference
+    private Set<User> users = new HashSet<>();
 
     @OneToMany(mappedBy ="carAdvertisement",cascade = CascadeType.ALL)
     @JsonBackReference
