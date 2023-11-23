@@ -1,15 +1,14 @@
-package com.example.bilbackend.auth;
+package com.example.bilbackend.controller;
 
-import com.example.bilbackend.model.User;
-import com.example.bilbackend.repository.UserRepository;
+import com.example.bilbackend.dto.AuthenticationRequest;
+import com.example.bilbackend.dto.AuthenticationResponse;
+import com.example.bilbackend.service.AuthenticationService;
+import com.example.bilbackend.dto.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

@@ -32,8 +32,8 @@ public class UserController {
         newUser.setPhoneNumber(user.getPhoneNumber());
         newUser.setEmail(user.getEmail());
 
-        Optional<User> existinguserEmail = userRepository.findUserByEmail(user.getEmail());
-        Optional<User> existinguserUserName = userRepository.findUserByUserName(user.getUserName());
+        Optional<User> existinguserEmail = userRepository.findByEmail(user.getEmail());
+        Optional<User> existinguserUserName = userRepository.findByUserName(user.getUserName());
         if (existinguserEmail.isPresent() || existinguserUserName.isPresent()) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } else {

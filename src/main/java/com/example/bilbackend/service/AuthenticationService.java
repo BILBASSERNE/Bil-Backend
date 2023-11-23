@@ -1,6 +1,9 @@
-package com.example.bilbackend.auth;
+package com.example.bilbackend.service;
 
 import com.example.bilbackend.config.JwtService;
+import com.example.bilbackend.dto.AuthenticationRequest;
+import com.example.bilbackend.dto.AuthenticationResponse;
+import com.example.bilbackend.dto.RegisterRequest;
 import com.example.bilbackend.model.User;
 import com.example.bilbackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +11,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
