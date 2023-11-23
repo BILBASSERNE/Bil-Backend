@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface CarRepository extends JpaRepository<CarAdvertisement, Integer> {
+public interface CarAdvertisementRepository extends JpaRepository<CarAdvertisement, Integer> {
     List<CarAdvertisement> findAllByOrderByIdDesc();
 }

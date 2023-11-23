@@ -1,7 +1,7 @@
 package com.example.bilbackend.controller;
 
 import com.example.bilbackend.model.CarAdvertisement;
-import com.example.bilbackend.repository.CarRepository;
+import com.example.bilbackend.repository.CarAdvertisementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,11 +14,11 @@ import java.util.List;
 public class CarAdvertisementController {
 
    @Autowired
-    CarRepository carRepository;
+   CarAdvertisementRepository carAdvertisementRepository;
 
     @GetMapping("/bilbassen")
     public List<CarAdvertisement> SortCarsByIdDecending() {
-        return carRepository.findAllByOrderByIdDesc();
+        return carAdvertisementRepository.findAllByOrderByIdDesc();
     }
 
 }
