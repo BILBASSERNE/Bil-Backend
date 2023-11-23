@@ -35,7 +35,7 @@ public class CarAdvertisement {
     private double kmDriven;
     private boolean isActive;
 
-    @OneToMany(mappedBy="carAdvertisement", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy ="carAdvertisement",cascade = CascadeType.ALL)
     @JsonBackReference
     private List<CarImage> images = new ArrayList<>();
 

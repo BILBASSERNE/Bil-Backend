@@ -8,14 +8,13 @@ import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 public class CorsConfig {
-
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
 
-        // Allow requests from http://localhost:63342
-        config.addAllowedOrigin("http://localhost:63342");
+        // Allow requests from any origin (during development)
+        config.addAllowedOrigin("*");
 
         // Allow common HTTP methods (GET, POST, PUT, DELETE, etc.)
         config.addAllowedMethod("*");
@@ -26,6 +25,4 @@ public class CorsConfig {
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
-
-
 }
