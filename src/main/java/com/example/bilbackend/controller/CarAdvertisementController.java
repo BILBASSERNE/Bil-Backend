@@ -1,8 +1,10 @@
 package com.example.bilbackend.controller;
 
+import com.example.bilbackend.dto.PostCarDTO;
 import com.example.bilbackend.model.CarAdvertisement;
 import com.example.bilbackend.repository.CarAdvertisementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +24,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
+
 public class CarAdvertisementController {
 
    @Autowired
@@ -56,5 +59,27 @@ public class CarAdvertisementController {
         return carAdvertisementRepository.findByNameContainingOrDescriptionContainingOrCarBrandContainingOrColorContainingOrGearTypeContaining(
                 keyword, keyword, keyword, keyword, keyword);
     }
-}
 
+    @PostMapping("/sellcar")
+    public ResponseEntity<PostCarDTO> sellCar(@RequestBody PostCarDTO car) {
+        CarAdvertisement carAdvertisement = new CarAdvertisement();
+        carAdvertisement.setName(car.getName());
+        carAdvertisement.setDescription(car.getDescription());
+        carAdvertisement.setPrice(car.getPrice());
+        carAdvertisement.setLicenseplate(car.getLicenseplate());
+        carAdvertisement.setCarBrand(car.getCarBrand());
+        carAdvertisement.setModelYear(car.getModelYear());
+        carAdvertisement.setBoughtYear(car.getBoughtYear());
+        carAdvertisement.setFuelType(car.getFuelType());
+        carAdvertisement.setFuelConsumption(car.getFuelConsumption());
+        carAdvertisement.setCarType(car.getCarType());
+        carAdvertisement.setColor(car.getColor());
+        carAdvertisement.setGearType(car.getGearType());
+        carAdvertisement.setNumberOfGears(car.getNumberOfGears());
+        carAdvertisement.setKmDriven(car.getKmDriven());
+        carAdvertisement.setActive(car.isActive());
+        carAdvertisementRepository.save(carAdvertisement);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+}
