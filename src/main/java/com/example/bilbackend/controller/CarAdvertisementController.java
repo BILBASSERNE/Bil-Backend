@@ -1,24 +1,14 @@
 package com.example.bilbackend.controller;
 
+import com.example.bilbackend.dto.CarRentDTO;
 import com.example.bilbackend.dto.PostCarDTO;
 import com.example.bilbackend.model.CarAdvertisement;
 import com.example.bilbackend.repository.CarAdvertisementRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestParam;
-import com.example.bilbackend.model.CarAdvertisement;
-import com.example.bilbackend.model.User;
 import com.example.bilbackend.service.FavoriteCarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import java.util.List;
 
@@ -27,8 +17,8 @@ import java.util.List;
 
 public class CarAdvertisementController {
 
-   @Autowired
-   CarAdvertisementRepository carAdvertisementRepository;
+    @Autowired
+    CarAdvertisementRepository carAdvertisementRepository;
 
     @Autowired
     private FavoriteCarService favoriteCarService;
@@ -46,14 +36,15 @@ public class CarAdvertisementController {
 
     @GetMapping("/{userName}/favorite")
     public ResponseEntity<List<CarAdvertisement>> getFavoriteCars(@PathVariable String userName) {
-            return ResponseEntity.ok(favoriteCarService.getFavoriteCars(userName));
+        return ResponseEntity.ok(favoriteCarService.getFavoriteCars(userName));
     }
 
 
-    @GetMapping("/bilbassen")
+    @GetMapping("/")
     public List<CarAdvertisement> SortCarsByIdDecending() {
         return carAdvertisementRepository.findAllByOrderByIdDesc();
     }
+
     @GetMapping("/cars")
     public List<CarAdvertisement> getCars(@RequestParam String keyword) {
         return carAdvertisementRepository.findByNameContainingOrDescriptionContainingOrCarBrandContainingOrColorContainingOrGearTypeContaining(
@@ -82,4 +73,20 @@ public class CarAdvertisementController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+@PostMapping("/rentcar")
+    public ResponseEntity<CarRentDTO> rentCar(@RequestBody CarRentDTO car) {
+        CarAdvertisement carAdvertisement = new CarAdvertisement();
+        carAdvertisement.setName(car.getName());
+        carAdvertisement.setDescription(car.getDescription());
+        carAdvertisement.setPrice(car.getPricePerDay());
+        carAdvertisement.setCarBrand(car.getCarBrand());
+        carAdvertisement.setModelYear(car.getModelYear());
+        carAdvertisement.setGearType(car.getGearType());
+        carAdvertisement.setSeats(car.getSeats());
+        carAdvertisement.setEquipment(car.getEquipment());
+        carAdvertisement.setRules(car.getRules());
+        carAdvertisement.setLocation(car.getLocation());
+        carAdvertisementRepository.save(carAdvertisement);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

@@ -1,0 +1,26 @@
+package com.example.bilbackend.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+
+public class CarRentDTO {
+    private int id;
+    private String name;
+    private String description;
+    private double pricePerDay;
+    private String carBrand;
+    private int modelYear;
+    private String fuelType;
+    private String gearType;
+    private int seats;
+    private String equipment;
+    private String rules;
+    private String location;
+}
