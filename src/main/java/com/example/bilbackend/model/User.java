@@ -16,7 +16,6 @@ import java.util.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
 @Entity
 public class User implements UserDetails {
 
@@ -43,7 +42,7 @@ public class User implements UserDetails {
     @JoinColumn(name = "company", referencedColumnName = "id")
     private Company company;
 
-    @OneToMany(mappedBy="user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<CarAdvertisement> carAdversitementList = new ArrayList<>();
 
@@ -105,5 +104,28 @@ public class User implements UserDetails {
 
     public void setCarAdversitementList(List<CarAdvertisement> carAdversitementList) {
         this.carAdversitementList = carAdversitementList;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id && Objects.equals(userName, user.userName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userName);
     }
 }
