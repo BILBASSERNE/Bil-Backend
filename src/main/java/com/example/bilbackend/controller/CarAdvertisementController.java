@@ -3,6 +3,7 @@ package com.example.bilbackend.controller;
 import com.example.bilbackend.model.CarAdvertisement;
 import com.example.bilbackend.repository.CarAdvertisementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,9 +53,15 @@ public class CarAdvertisementController {
         return carAdvertisementRepository.findAllByOrderByIdDesc();
     }
     @GetMapping("/cars")
-    public List<CarAdvertisement> getCars(@RequestParam String keyword) {
-        return carAdvertisementRepository.findByNameContainingOrDescriptionContainingOrCarBrandContainingOrColorContainingOrGearTypeContaining(
+    public ResponseEntity<List<CarAdvertisement>> getCars(@RequestParam String keyword) {
+        List<CarAdvertisement> cars = carAdvertisementRepository.findByNameContainingOrDescriptionContainingOrCarBrandContainingOrColorContainingOrGearTypeContaining(
                 keyword, keyword, keyword, keyword, keyword);
+
+        if (cars.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(cars, HttpStatus.OK);
+        }
     }
 }
 
