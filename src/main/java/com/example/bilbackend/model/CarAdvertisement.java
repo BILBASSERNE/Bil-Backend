@@ -59,5 +59,13 @@ public class CarAdvertisement {
     @JoinColumn(name = "user", referencedColumnName = "id")
     private User user;
 
+    @Override
+    public String toString() {
+        return "CarAdvertisement{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }
 

@@ -24,6 +24,7 @@ public class FavoriteCarService {
         if (findUserByUserName.isPresent()) {
             user = findUserByUserName.get();
         }
+        user.getCars().clear();
         user.getCars().add(car);
         userRepository.save(user);
     }

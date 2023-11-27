@@ -4,6 +4,12 @@ import com.example.bilbackend.dto.CarRentDTO;
 import com.example.bilbackend.dto.PostCarDTO;
 import com.example.bilbackend.model.CarAdvertisement;
 import com.example.bilbackend.repository.CarAdvertisementRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 import com.example.bilbackend.service.FavoriteCarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +29,7 @@ public class CarAdvertisementController {
     @Autowired
     private FavoriteCarService favoriteCarService;
 
-    @PostMapping("/{carId}/{userName}/favorite")
+    @PostMapping("/favorite/{carId}/{userName}")
     public ResponseEntity<String> addToFavorites(@PathVariable int carId, @PathVariable String userName) {
         try {
             favoriteCarService.addToFavorites(carId, userName);
@@ -34,13 +40,12 @@ public class CarAdvertisementController {
         }
     }
 
-    @GetMapping("/{userName}/favorite")
+    @GetMapping("/favorite/{userName}")
     public ResponseEntity<List<CarAdvertisement>> getFavoriteCars(@PathVariable String userName) {
         return ResponseEntity.ok(favoriteCarService.getFavoriteCars(userName));
     }
 
-
-    @GetMapping("/")
+    @GetMapping("/bilbassen")
     public List<CarAdvertisement> SortCarsByIdDecending() {
         return carAdvertisementRepository.findAllByOrderByIdDesc();
     }
