@@ -37,7 +37,7 @@ public class CarAdvertisementController {
         }
     }
 
-    @GetMapping("/{userName}/favorite")
+    @GetMapping("/favorite/{userName}")
     public ResponseEntity<List<CarAdvertisement>> getFavoriteCars(@PathVariable String userName) {
             return ResponseEntity.ok(favoriteCarService.getFavoriteCars(userName));
     }
