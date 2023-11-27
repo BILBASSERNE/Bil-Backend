@@ -19,21 +19,14 @@ public class FavoriteCarService {
 
     public void addToFavorites(int carId, String userName) throws Exception {
         CarAdvertisement car = carAdvertisementRepository.findById(carId).orElseThrow(() -> new Exception("Car not found"));
-        System.out.println("Car");
-        System.out.println(car.getName());
         Optional<User> findUserByUserName = userRepository.findByUserName(userName);
-        System.out.println("findByUsername");
         User user = new User();
         if (findUserByUserName.isPresent()) {
-            System.out.println("User");
             user = findUserByUserName.get();
-            System.out.println(user.getId());
         }
         user.getCars().clear();
         user.getCars().add(car);
-        System.out.println("getCars");
         userRepository.save(user);
-        System.out.println("saveee");
     }
 
     public List<CarAdvertisement> getFavoriteCars(String userName) {
