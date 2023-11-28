@@ -51,9 +51,15 @@ public class CarAdvertisementController {
     }
 
     @GetMapping("/cars")
-    public List<CarAdvertisement> getCars(@RequestParam String keyword) {
-        return carAdvertisementRepository.findByNameContainingOrDescriptionContainingOrCarBrandContainingOrColorContainingOrGearTypeContaining(
+    public ResponseEntity<List<CarAdvertisement>> getCars(@RequestParam String keyword) {
+        List<CarAdvertisement> cars = carAdvertisementRepository.findByNameContainingOrDescriptionContainingOrCarBrandContainingOrColorContainingOrGearTypeContaining(
                 keyword, keyword, keyword, keyword, keyword);
+
+        if (cars.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(cars, HttpStatus.OK);
+        }
     }
 
     @PostMapping("/sellcar")
