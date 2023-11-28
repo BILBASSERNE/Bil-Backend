@@ -70,6 +70,7 @@ public class CarAdvertisementController {
         carAdvertisement.setFuelConsumption(car.getFuelConsumption());
         carAdvertisement.setCarType(car.getCarType());
         carAdvertisement.setColor(car.getColor());
+        // implement carAdvertisement.setImages(car.getImages());
         carAdvertisement.setGearType(car.getGearType());
         carAdvertisement.setNumberOfGears(car.getNumberOfGears());
         carAdvertisement.setKmDriven(car.getKmDriven());

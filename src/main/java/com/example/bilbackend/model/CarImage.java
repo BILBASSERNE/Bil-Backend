@@ -17,8 +17,6 @@ public class CarImage {
     private int id;
     private String url;
 
-
-
     @ManyToOne
     @JoinColumn(name = "carAdvertisement",referencedColumnName = "id")
     private CarAdvertisement carAdvertisement;
