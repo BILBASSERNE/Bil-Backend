@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class PostCarDTO {
+
     private String name;
     private String description;
     private double price;
@@ -25,5 +25,4 @@ public class PostCarDTO {
     private String gearType;
     private int numberOfGears;
     private double kmDriven;
-    private boolean isActive;
 }
