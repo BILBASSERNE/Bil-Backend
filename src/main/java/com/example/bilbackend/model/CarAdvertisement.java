@@ -41,7 +41,7 @@ public class CarAdvertisement {
     private int seats;
     private String equipment;
     private String rules;
-    private String Location;
+    private boolean isRenting;
 
     @ManyToMany(mappedBy = "cars")
     @JsonBackReference

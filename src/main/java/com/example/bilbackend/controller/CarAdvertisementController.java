@@ -4,12 +4,6 @@ import com.example.bilbackend.dto.CarRentDTO;
 import com.example.bilbackend.dto.PostCarDTO;
 import com.example.bilbackend.model.CarAdvertisement;
 import com.example.bilbackend.repository.CarAdvertisementRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestParam;
 import com.example.bilbackend.service.FavoriteCarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -84,20 +79,31 @@ public class CarAdvertisementController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-@PostMapping("/rentcar")
+    @PostMapping("/rentcar")
     public ResponseEntity<CarRentDTO> rentCar(@RequestBody CarRentDTO car) {
+        System.out.println(car);
         CarAdvertisement carAdvertisement = new CarAdvertisement();
         carAdvertisement.setName(car.getName());
         carAdvertisement.setDescription(car.getDescription());
-        carAdvertisement.setPrice(car.getPricePerDay());
+        carAdvertisement.setPrice(car.getPrice());
         carAdvertisement.setCarBrand(car.getCarBrand());
         carAdvertisement.setModelYear(car.getModelYear());
         carAdvertisement.setGearType(car.getGearType());
         carAdvertisement.setSeats(car.getSeats());
         carAdvertisement.setEquipment(car.getEquipment());
         carAdvertisement.setRules(car.getRules());
-        carAdvertisement.setLocation(car.getLocation());
+        carAdvertisement.setRenting(true);
         carAdvertisementRepository.save(carAdvertisement);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/cardetails/{carId}")
+    public ResponseEntity<CarAdvertisement> getCarInformation (@PathVariable int carId) {
+        Optional<CarAdvertisement> car = carAdvertisementRepository.findCarAdvertisementById(carId);
+        if (car.isPresent()) {
+            return new ResponseEntity<>(car.get(), HttpStatus.OK);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

@@ -14,7 +14,7 @@ public class CarRentDTO {
     private int id;
     private String name;
     private String description;
-    private double pricePerDay;
+    private double price;
     private String carBrand;
     private int modelYear;
     private String fuelType;
@@ -22,5 +22,5 @@ public class CarRentDTO {
     private int seats;
     private String equipment;
     private String rules;
-    private String location;
+    private boolean isRenting;
 }
