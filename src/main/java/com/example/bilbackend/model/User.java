@@ -11,10 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
 
-
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 public class User implements UserDetails {
@@ -43,6 +41,71 @@ public class User implements UserDetails {
     @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<CarAdvertisement> carAdversitementList = new ArrayList<>();
+
+    public User() {
+
+    }
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public int getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(int phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     // no roles for authorizing user (enum - role)
     @Override
@@ -106,16 +169,16 @@ public class User implements UserDetails {
                 '}';
     }
 
-    /*@Override
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id && Objects.equals(userName, user.userName);
+        return id == user.id && phoneNumber == user.phoneNumber && Objects.equals(userName, user.userName) && Objects.equals(password, user.password) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(city, user.city) && Objects.equals(email, user.email) && Objects.equals(cars, user.cars) && Objects.equals(carAdversitementList, user.carAdversitementList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userName);
-    }*/
+        return Objects.hash(id, userName, password, firstName, lastName, city, phoneNumber, email, cars, carAdversitementList);
+    }
 }

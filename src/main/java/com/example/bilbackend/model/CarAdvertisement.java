@@ -37,7 +37,7 @@ public class CarAdvertisement {
     private int numberOfGears;
     private double kmDriven;
     private boolean isActive;
-    private boolean isFavorited;
+    //private boolean isFavorited;
     private int seats;
     private String equipment;
     private String rules;

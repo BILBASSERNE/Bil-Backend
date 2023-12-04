@@ -29,10 +29,11 @@ public class FavoriteCarService {
         userRepository.save(user);
     }
 
-    public List<CarAdvertisement> getFavoriteCars(String userName) {
-        List<CarAdvertisement> favoriteCars = carAdvertisementRepository.findAllByUser_UserName(userName);
-        favoriteCars.sort(Comparator.comparing(CarAdvertisement::isFavorited).reversed());
-        return favoriteCars;
+
+    public List<CarAdvertisement> getMyAdvertisedCars(String userName) {
+        List<CarAdvertisement> myAdvertisedCars = carAdvertisementRepository.findAllByUser_UserName(userName);
+        System.out.println(myAdvertisedCars);
+        return myAdvertisedCars;
     }
 
 }
