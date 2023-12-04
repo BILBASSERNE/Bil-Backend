@@ -12,6 +12,7 @@ public interface CarAdvertisementRepository extends JpaRepository<CarAdvertiseme
 
     List<CarAdvertisement> findAllByUser_UserName(String userName);
     List<CarAdvertisement> findAllByOrderByIdDesc();
+    Optional<CarAdvertisement> findCarAdvertisementById(int id);
     List<CarAdvertisement> findByNameContainingOrDescriptionContainingOrCarBrandContainingOrColorContainingOrGearTypeContaining(String keyword, String keyword1, String keyword2, String keyword3, String keyword4);
 
 }
