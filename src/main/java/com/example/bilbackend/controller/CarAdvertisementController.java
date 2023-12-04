@@ -81,7 +81,6 @@ public class CarAdvertisementController {
             returnedCar.setGearType(car.getGearType());
             returnedCar.setNumberOfGears(car.getNumberOfGears());
             returnedCar.setActive(car.isActive());
-            returnedCar.setFavorited(car.isFavorited());
             returnedCar.setSeats(car.getSeats());
             returnedCar.setEquipment(car.getEquipment());
             returnedCar.setRules(car.getRules());
@@ -198,7 +197,6 @@ public class CarAdvertisementController {
             returnedCar.setGearType(foundCar.getGearType());
             returnedCar.setNumberOfGears(foundCar.getNumberOfGears());
             returnedCar.setActive(foundCar.isActive());
-            returnedCar.setFavorited(foundCar.isFavorited());
             returnedCar.setSeats(foundCar.getSeats());
             returnedCar.setEquipment(foundCar.getEquipment());
             returnedCar.setRules(foundCar.getRules());
