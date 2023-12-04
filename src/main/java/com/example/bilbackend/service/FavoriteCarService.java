@@ -1,6 +1,8 @@
 package com.example.bilbackend.service;
 
+import com.example.bilbackend.dto.GetCarDTO;
 import com.example.bilbackend.model.CarAdvertisement;
+import com.example.bilbackend.model.CarImage;
 import com.example.bilbackend.model.User;
 import com.example.bilbackend.repository.CarAdvertisementRepository;
 import com.example.bilbackend.repository.UserRepository;
@@ -30,10 +32,29 @@ public class FavoriteCarService {
     }
 
 
-    public List<CarAdvertisement> getMyAdvertisedCars(String userName) {
+    public List<GetCarDTO> getMyAdvertisedCars(String userName) {
         List<CarAdvertisement> myAdvertisedCars = carAdvertisementRepository.findAllByUser_UserName(userName);
+        List<GetCarDTO> listOfCars = new ArrayList<>();
         System.out.println(myAdvertisedCars);
-        return myAdvertisedCars;
+
+        for (CarAdvertisement car : myAdvertisedCars) {
+            List<byte[]> imageList = new ArrayList<>();
+
+            for (CarImage image : car.getImages()) {
+                imageList.add(image.getSrc());
+            }
+
+            GetCarDTO carDTO = new GetCarDTO();
+            carDTO.setImages(imageList);
+            carDTO.setName(car.getName());
+            carDTO.setPrice(car.getPrice());
+
+            listOfCars.add(carDTO);
+
+        }
+
+
+        return listOfCars;
     }
 
 }

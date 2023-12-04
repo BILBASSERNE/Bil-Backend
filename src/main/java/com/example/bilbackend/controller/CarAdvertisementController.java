@@ -52,7 +52,7 @@ public class CarAdvertisementController {
 
 
     @GetMapping("/annoncer/{userName}")
-    public ResponseEntity<List<CarAdvertisement>> getMyAdvertisedCars(@PathVariable String userName) {
+    public ResponseEntity<List<GetCarDTO>> getMyAdvertisedCars(@PathVariable String userName) {
         return ResponseEntity.ok(favoriteCarService.getMyAdvertisedCars(userName));
     }
 
