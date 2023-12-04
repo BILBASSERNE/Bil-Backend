@@ -3,7 +3,15 @@ package com.example.bilbackend.controller;
 import com.example.bilbackend.dto.CarRentDTO;
 import com.example.bilbackend.dto.PostCarDTO;
 import com.example.bilbackend.model.CarAdvertisement;
+import com.example.bilbackend.model.User;
 import com.example.bilbackend.repository.CarAdvertisementRepository;
+import com.example.bilbackend.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 import com.example.bilbackend.service.FavoriteCarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +31,9 @@ public class CarAdvertisementController {
 
     @Autowired
     private FavoriteCarService favoriteCarService;
+
+    @Autowired
+    UserRepository userRepository;
 
     @PostMapping("/favorite/{carId}/{userName}")
     public ResponseEntity<String> addToFavorites(@PathVariable int carId, @PathVariable String userName) {
@@ -57,26 +68,37 @@ public class CarAdvertisementController {
         }
     }
 
-    @PostMapping("/sellcar")
-    public ResponseEntity<PostCarDTO> sellCar(@RequestBody PostCarDTO car) {
-        CarAdvertisement carAdvertisement = new CarAdvertisement();
-        carAdvertisement.setName(car.getName());
-        carAdvertisement.setDescription(car.getDescription());
-        carAdvertisement.setPrice(car.getPrice());
-        carAdvertisement.setLicenseplate(car.getLicenseplate());
-        carAdvertisement.setCarBrand(car.getCarBrand());
-        carAdvertisement.setModelYear(car.getModelYear());
-        carAdvertisement.setBoughtYear(car.getBoughtYear());
-        carAdvertisement.setFuelType(car.getFuelType());
-        carAdvertisement.setFuelConsumption(car.getFuelConsumption());
-        carAdvertisement.setCarType(car.getCarType());
-        carAdvertisement.setColor(car.getColor());
-        carAdvertisement.setGearType(car.getGearType());
-        carAdvertisement.setNumberOfGears(car.getNumberOfGears());
-        carAdvertisement.setKmDriven(car.getKmDriven());
-        carAdvertisement.setActive(car.isActive());
-        carAdvertisementRepository.save(carAdvertisement);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PostMapping("/sellcar/{userName}")
+    public ResponseEntity<PostCarDTO> sellCar(@RequestBody PostCarDTO car, @PathVariable String userName) {
+        Optional<User> user = userRepository.findByUserName(userName);
+
+        if (user.isPresent()) {
+          user.get().getUsername();
+            System.out.println("jeg er inde i if-statement");
+            System.out.println(user);
+            CarAdvertisement carAdvertisement = new CarAdvertisement();
+            carAdvertisement.setName(car.getName());
+            carAdvertisement.setDescription(car.getDescription());
+            carAdvertisement.setPrice(car.getPrice());
+            carAdvertisement.setLicenseplate(car.getLicenseplate());
+            carAdvertisement.setCarBrand(car.getCarBrand());
+            carAdvertisement.setModelYear(car.getModelYear());
+            carAdvertisement.setBoughtYear(car.getBoughtYear());
+            carAdvertisement.setFuelType(car.getFuelType());
+            carAdvertisement.setFuelConsumption(car.getFuelConsumption());
+            carAdvertisement.setCarType(car.getCarType());
+            carAdvertisement.setColor(car.getColor());
+            // implement carAdvertisement.setImages(car.getImages());
+            carAdvertisement.setGearType(car.getGearType());
+            carAdvertisement.setNumberOfGears(car.getNumberOfGears());
+            carAdvertisement.setKmDriven(car.getKmDriven());
+            carAdvertisement.setActive(true);
+            carAdvertisement.setUser(user.get());
+            carAdvertisementRepository.save(carAdvertisement);
+
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/rentcar")
