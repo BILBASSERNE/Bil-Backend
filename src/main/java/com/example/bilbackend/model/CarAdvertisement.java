@@ -52,10 +52,6 @@ public class CarAdvertisement {
     private List<CarImage> images = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "company", referencedColumnName = "id")
-    private Company company;
-
-    @ManyToOne
     @JoinColumn(name = "user", referencedColumnName = "id")
     private User user;
 

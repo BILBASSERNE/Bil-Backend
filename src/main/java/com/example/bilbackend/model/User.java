@@ -40,11 +40,6 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "car_id"))
     private Set<CarAdvertisement> cars = new HashSet<>();
 
-
-    @ManyToOne
-    @JoinColumn(name = "company", referencedColumnName = "id")
-    private Company company;
-
     @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<CarAdvertisement> carAdversitementList = new ArrayList<>();
@@ -91,14 +86,6 @@ public class User implements UserDetails {
 
     public void setCars(Set<CarAdvertisement> cars) {
         this.cars = cars;
-    }
-
-    public Company getCompany() {
-        return company;
-    }
-
-    public void setCompany(Company company) {
-        this.company = company;
     }
 
     public List<CarAdvertisement> getCarAdversitementList() {
