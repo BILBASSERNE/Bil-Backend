@@ -15,7 +15,10 @@ public class CarImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String url;
+
+    @Lob
+    @Column(name = "src", columnDefinition = "LONGBLOB")
+    private byte[] src;
 
     @ManyToOne
     @JoinColumn(name = "carAdvertisement",referencedColumnName = "id")

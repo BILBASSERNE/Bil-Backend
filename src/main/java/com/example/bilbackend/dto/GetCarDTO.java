@@ -7,12 +7,13 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Data
 @Builder
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
-public class PostCarDTO {
+@NoArgsConstructor
+public class GetCarDTO {
 
+    private int id;
     private String name;
     private String description;
     private double price;
@@ -27,5 +28,17 @@ public class PostCarDTO {
     private String gearType;
     private int numberOfGears;
     private double kmDriven;
-    private List<ImageDTO> images;
+    private boolean isActive;
+    private boolean isFavorited;
+    private int seats;
+    private String equipment;
+    private String rules;
+    private boolean isRenting;
+
+    private List<byte[]> images;
+
+    private String firstName;
+    private String lastName;
+    private String city;
+    private int phoneNumber;
 }

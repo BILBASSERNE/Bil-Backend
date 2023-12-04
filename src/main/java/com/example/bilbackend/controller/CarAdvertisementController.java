@@ -1,8 +1,11 @@
 package com.example.bilbackend.controller;
 
 import com.example.bilbackend.dto.CarRentDTO;
+import com.example.bilbackend.dto.GetCarDTO;
+import com.example.bilbackend.dto.ImageDTO;
 import com.example.bilbackend.dto.PostCarDTO;
 import com.example.bilbackend.model.CarAdvertisement;
+import com.example.bilbackend.model.CarImage;
 import com.example.bilbackend.model.User;
 import com.example.bilbackend.repository.CarAdvertisementRepository;
 import com.example.bilbackend.repository.UserRepository;
@@ -18,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,8 +56,45 @@ public class CarAdvertisementController {
     }
 
     @GetMapping("/bilbassen")
-    public List<CarAdvertisement> SortCarsByIdDecending() {
-        return carAdvertisementRepository.findAllByOrderByIdDesc();
+    public ResponseEntity<List<GetCarDTO>> SortCarsByIdDecending() {
+        List<CarAdvertisement> cars = carAdvertisementRepository.findAllByOrderByIdDesc();
+        List<GetCarDTO> carList = new ArrayList<>();
+
+        for (CarAdvertisement car : cars) {
+            List<byte[]> imageList = new ArrayList<>();
+            GetCarDTO returnedCar = new GetCarDTO();
+
+            returnedCar.setId(car.getId());
+            returnedCar.setName(car.getName());
+            returnedCar.setDescription(car.getDescription());
+            returnedCar.setPrice(car.getPrice());
+            returnedCar.setLicenseplate(car.getLicenseplate());
+            returnedCar.setCarBrand(car.getCarBrand());
+            returnedCar.setModelYear(car.getModelYear());
+            returnedCar.setBoughtYear(car.getBoughtYear());
+            returnedCar.setFuelType(car.getFuelType());
+            returnedCar.setFuelType(car.getFuelType());
+            returnedCar.setFuelConsumption(car.getFuelConsumption());
+            returnedCar.setCarType(car.getCarType());
+            returnedCar.setColor(car.getColor());
+            returnedCar.setGearType(car.getGearType());
+            returnedCar.setNumberOfGears(car.getNumberOfGears());
+            returnedCar.setActive(car.isActive());
+            returnedCar.setFavorited(car.isFavorited());
+            returnedCar.setSeats(car.getSeats());
+            returnedCar.setEquipment(car.getEquipment());
+            returnedCar.setRules(car.getRules());
+            returnedCar.setRenting(car.isRenting());
+
+            for (CarImage image : car.getImages()) {
+                imageList.add(image.getSrc());
+            }
+
+            returnedCar.setImages(imageList);
+            carList.add(returnedCar);
+        }
+
+        return new ResponseEntity<>(carList, HttpStatus.OK);
     }
 
     @GetMapping("/cars")
@@ -77,6 +118,7 @@ public class CarAdvertisementController {
             System.out.println("jeg er inde i if-statement");
             System.out.println(user);
             CarAdvertisement carAdvertisement = new CarAdvertisement();
+
             carAdvertisement.setName(car.getName());
             carAdvertisement.setDescription(car.getDescription());
             carAdvertisement.setPrice(car.getPrice());
@@ -88,12 +130,22 @@ public class CarAdvertisementController {
             carAdvertisement.setFuelConsumption(car.getFuelConsumption());
             carAdvertisement.setCarType(car.getCarType());
             carAdvertisement.setColor(car.getColor());
-            // implement carAdvertisement.setImages(car.getImages());
+
+            for (ImageDTO imageDTO : car.getImages()) {
+                CarImage carImage = new CarImage();
+                carImage.setSrc(imageDTO.getSrc());
+                carImage.setCarAdvertisement(carAdvertisement);
+                carAdvertisement.getImages().add(carImage);
+            }
+
             carAdvertisement.setGearType(car.getGearType());
             carAdvertisement.setNumberOfGears(car.getNumberOfGears());
             carAdvertisement.setKmDriven(car.getKmDriven());
             carAdvertisement.setActive(true);
             carAdvertisement.setUser(user.get());
+
+            //user.get().getCars().add(carAdvertisement);
+
             carAdvertisementRepository.save(carAdvertisement);
 
             return new ResponseEntity<>(HttpStatus.OK);
@@ -120,12 +172,62 @@ public class CarAdvertisementController {
     }
 
     @GetMapping("/cardetails/{carId}")
-    public ResponseEntity<CarAdvertisement> getCarInformation (@PathVariable int carId) {
+    public ResponseEntity<GetCarDTO> getCarInformation (@PathVariable int carId) {
         Optional<CarAdvertisement> car = carAdvertisementRepository.findCarAdvertisementById(carId);
         if (car.isPresent()) {
-            return new ResponseEntity<>(car.get(), HttpStatus.OK);
+
+            CarAdvertisement foundCar = car.get();
+
+            List<byte[]> imageList = new ArrayList<>();
+            GetCarDTO returnedCar = new GetCarDTO();
+
+            returnedCar.setId(foundCar.getId());
+            returnedCar.setName(foundCar.getName());
+            returnedCar.setDescription(foundCar.getDescription());
+            returnedCar.setPrice(foundCar.getPrice());
+            returnedCar.setLicenseplate(foundCar.getLicenseplate());
+            returnedCar.setCarBrand(foundCar.getCarBrand());
+            returnedCar.setModelYear(foundCar.getModelYear());
+            returnedCar.setBoughtYear(foundCar.getBoughtYear());
+            returnedCar.setFuelType(foundCar.getFuelType());
+            returnedCar.setFuelType(foundCar.getFuelType());
+            returnedCar.setFuelConsumption(foundCar.getFuelConsumption());
+            returnedCar.setCarType(foundCar.getCarType());
+            returnedCar.setColor(foundCar.getColor());
+            returnedCar.setGearType(foundCar.getGearType());
+            returnedCar.setNumberOfGears(foundCar.getNumberOfGears());
+            returnedCar.setActive(foundCar.isActive());
+            returnedCar.setFavorited(foundCar.isFavorited());
+            returnedCar.setSeats(foundCar.getSeats());
+            returnedCar.setEquipment(foundCar.getEquipment());
+            returnedCar.setRules(foundCar.getRules());
+            returnedCar.setRenting(foundCar.isRenting());
+
+            for (CarImage image : foundCar.getImages()) {
+                imageList.add(image.getSrc());
+            }
+
+            returnedCar.setImages(imageList);
+
+            returnedCar.setFirstName(foundCar.getUser().getFirstName());
+            returnedCar.setLastName(foundCar.getUser().getLastName());
+            returnedCar.setCity(foundCar.getUser().getCity());
+            returnedCar.setPhoneNumber(foundCar.getUser().getPhoneNumber());
+
+
+
+            return new ResponseEntity<>(returnedCar, HttpStatus.OK);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
+
+
+    @GetMapping("/list")
+    public List<CarAdvertisement> get() {
+        return carAdvertisementRepository.findAll();
+    }
 }
+
+
+
