@@ -31,6 +31,10 @@ public class FavoriteCarService {
         userRepository.save(user);
     }
 
+    public Set<CarAdvertisement> getFavoriteCarsByUserName(String userName) {
+        return carAdvertisementRepository.findFavoriteCarsByUserName(userName);
+    }
+
 
     public List<GetCarDTO> getMyAdvertisedCars(String userName) {
         List<CarAdvertisement> myAdvertisedCars = carAdvertisementRepository.findAllByUser_UserName(userName);

@@ -21,9 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @CrossOrigin
 @RestController
@@ -50,8 +48,13 @@ public class CarAdvertisementController {
         }
     }
 
+    @GetMapping("/favorite/{userName}")
+    public ResponseEntity<Set<CarAdvertisement>> getFavoritedCars(@PathVariable String userName) {
+        return ResponseEntity.ok(favoriteCarService.getFavoriteCarsByUserName(userName));
+    }
 
-    @GetMapping("/annoncer/{userName}")
+
+    @GetMapping("/annonce/{userName}")
     public ResponseEntity<List<GetCarDTO>> getMyAdvertisedCars(@PathVariable String userName) {
         return ResponseEntity.ok(favoriteCarService.getMyAdvertisedCars(userName));
     }

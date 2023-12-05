@@ -37,7 +37,8 @@ public class User implements UserDetails {
     @JoinTable(name = "favorite_cars",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "car_id"))
-    private Set<CarAdvertisement> cars = new HashSet<>();
+    private Set<CarAdvertisement> favoriteCars = new HashSet<>();
+
 
     @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
     @JsonBackReference
@@ -46,7 +47,6 @@ public class User implements UserDetails {
     public User() {
 
     }
-
 
     public int getId() {
         return id;
@@ -145,11 +145,11 @@ public class User implements UserDetails {
     }
 
     public Set<CarAdvertisement> getCars() {
-        return cars;
+        return favoriteCars;
     }
 
     public void setCars(Set<CarAdvertisement> cars) {
-        this.cars = cars;
+        this.favoriteCars = cars;
     }
 
     public List<CarAdvertisement> getCarAdvertisementList() {
@@ -175,11 +175,11 @@ public class User implements UserDetails {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id && phoneNumber == user.phoneNumber && Objects.equals(userName, user.userName) && Objects.equals(password, user.password) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(city, user.city) && Objects.equals(email, user.email) && Objects.equals(cars, user.cars) && Objects.equals(carAdvertisementList, user.carAdvertisementList);
+        return id == user.id && phoneNumber == user.phoneNumber && Objects.equals(userName, user.userName) && Objects.equals(password, user.password) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(city, user.city) && Objects.equals(email, user.email) && Objects.equals(favoriteCars, user.favoriteCars) && Objects.equals(carAdvertisementList, user.carAdvertisementList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userName, password, firstName, lastName, city, phoneNumber, email, cars, carAdvertisementList);
+        return Objects.hash(id, userName, password, firstName, lastName, city, phoneNumber, email, favoriteCars, carAdvertisementList);
     }
 }

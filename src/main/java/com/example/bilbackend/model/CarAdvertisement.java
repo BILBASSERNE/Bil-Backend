@@ -43,7 +43,7 @@ public class CarAdvertisement {
     private String rules;
     private boolean isRenting;
 
-    @ManyToMany(mappedBy = "cars")
+    @ManyToMany(mappedBy = "favoriteCars")
     @JsonBackReference
     private Set<User> users = new HashSet<>();
 
