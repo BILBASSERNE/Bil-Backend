@@ -20,15 +20,20 @@ public class FavoriteCarService {
     private final UserRepository userRepository;
 
     public void addToFavorites(int carId, String userName) throws Exception {
-        CarAdvertisement car = carAdvertisementRepository.findById(carId).orElseThrow(() -> new Exception("Car not found"));
-        Optional<User> findUserByUserName = userRepository.findByUserName(userName);
-        User user = new User();
-        if (findUserByUserName.isPresent()) {
-            user = findUserByUserName.get();
+
+        try {
+            CarAdvertisement car = carAdvertisementRepository.findById(carId).orElseThrow(() -> new Exception("Car not found"));
+            Optional<User> findUserByUserName = userRepository.findByUserName(userName);
+            User user = new User();
+            if (findUserByUserName.isPresent()) {
+                user = findUserByUserName.get();
+            }
+            user.getCars().clear();
+            user.getCars().add(car);
+            userRepository.save(user);
+        } catch (StackOverflowError stackOverflowError) {
+            System.out.println("Car has already been favoritted");
         }
-        user.getCars().clear();
-        user.getCars().add(car);
-        userRepository.save(user);
     }
 
     public Set<CarAdvertisement> getFavoriteCarsByUserName(String userName) {

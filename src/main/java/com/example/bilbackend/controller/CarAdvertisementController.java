@@ -43,7 +43,6 @@ public class CarAdvertisementController {
             favoriteCarService.addToFavorites(carId, userName);
             return ResponseEntity.ok("Car added to favorites successfully!");
         } catch (Exception e) {
-            // Handle the exception appropriately, e.g., return a 404 status if the car is not found
             return ResponseEntity.status(404).body("Car not found");
         }
     }
