@@ -12,6 +12,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -51,6 +53,31 @@ public class AuthenticationService {
 
         // DUNNO IF THIS WORKS
         var jwtToken = jwtService.generateToken(user.get());
+
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .build();
+    }
+
+    public AuthenticationResponse updateUser(RegisterRequest updatedUser, String userName) {
+        Optional<User> user = userRepository.findByUserName(userName);
+        User foundUser = null;
+        if (user.isPresent()) {
+            foundUser = user.get();
+
+            foundUser.setUserName(updatedUser.getUserName());
+            if (!updatedUser.getPassword().isEmpty()) {
+                foundUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+            }
+            foundUser.setFirstName(updatedUser.getFirstName());
+            foundUser.setLastName(updatedUser.getLastName());
+            foundUser.setCity(updatedUser.getCity());
+            foundUser.setEmail(updatedUser.getEmail());
+
+            userRepository.save(foundUser);
+        }
+
+        var jwtToken = jwtService.generateToken(foundUser);
 
         return AuthenticationResponse.builder()
                 .token(jwtToken)
