@@ -9,8 +9,10 @@ import com.example.bilbackend.model.CarImage;
 import com.example.bilbackend.model.User;
 import com.example.bilbackend.repository.CarAdvertisementRepository;
 import com.example.bilbackend.repository.UserRepository;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -116,7 +118,7 @@ public class CarAdvertisementController {
         Optional<User> user = userRepository.findByUserName(userName);
 
         if (user.isPresent()) {
-          user.get().getUsername();
+            user.get().getUsername();
             System.out.println("jeg er inde i if-statement");
             System.out.println(user);
             CarAdvertisement carAdvertisement = new CarAdvertisement();
@@ -174,7 +176,7 @@ public class CarAdvertisementController {
     }
 
     @GetMapping("/cardetails/{carId}")
-    public ResponseEntity<GetCarDTO> getCarInformation (@PathVariable int carId) {
+    public ResponseEntity<GetCarDTO> getCarInformation(@PathVariable int carId) {
         Optional<CarAdvertisement> car = carAdvertisementRepository.findCarAdvertisementById(carId);
         if (car.isPresent()) {
 
@@ -216,18 +218,54 @@ public class CarAdvertisementController {
             returnedCar.setPhoneNumber(foundCar.getUser().getPhoneNumber());
 
 
-
             return new ResponseEntity<>(returnedCar, HttpStatus.OK);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
+    @PutMapping("/editcar/{carId}")
+    public ResponseEntity<PostCarDTO> editCarAdvertisement(@PathVariable int carId, @RequestBody PostCarDTO editedCarAdvertisement) {
+        favoriteCarService.editCar(carId, editedCarAdvertisement);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/existingcarinfo/{carId}")
+    public ResponseEntity<CarAdvertisement> getCarAdvertisement(@PathVariable int carId) {
+        Optional<CarAdvertisement> foundCar = carAdvertisementRepository.findCarAdvertisementById(carId);
+        return foundCar.map(carAdvertisement -> new ResponseEntity<>(carAdvertisement, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @DeleteMapping("/deletecar/{carId}")
+    public ResponseEntity<CarAdvertisement> deleteCarAdvertisement(@PathVariable int carId) {
+        carAdvertisementRepository.deleteById(carId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @GetMapping("/check/{carId}/{userName}")
+        public ResponseEntity checkCarUserName(@PathVariable int carId, @PathVariable String userName) {
+            Optional<User> user = userRepository.findByUserName(userName);
+            Optional<CarAdvertisement> car = carAdvertisementRepository.findById(carId);
+
+            if (car.isPresent() && user.isPresent()) {
+                User foundUser = user.get();
+                CarAdvertisement foundCar = car.get();
+
+                if (foundCar.getUser().getId() != (foundUser.getId())) {
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                }
+            }
+            return ResponseEntity.ok(car);
+        }
 
     @GetMapping("/list")
     public List<CarAdvertisement> get() {
         return carAdvertisementRepository.findAll();
     }
+
+
 }
 
 
