@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -23,4 +25,5 @@ public class CarRentDTO {
     private String equipment;
     private String rules;
     private boolean isRenting;
+    private List<ImageDTO> images;
 }

@@ -50,7 +50,7 @@ public class CarAdvertisementController {
     }
 
     @GetMapping("/favorite/{userName}")
-    public ResponseEntity<Set<CarAdvertisement>> getFavoritedCars(@PathVariable String userName) {
+    public ResponseEntity<List<GetCarDTO>> getFavoritedCars(@PathVariable String userName) {
         return ResponseEntity.ok(favoriteCarService.getFavoriteCarsByUserName(userName));
     }
 
@@ -102,16 +102,52 @@ public class CarAdvertisementController {
     }
 
     @GetMapping("/cars")
-    public ResponseEntity<List<CarAdvertisement>> getCars(@RequestParam String keyword) {
+    public ResponseEntity<List<GetCarDTO>> getCars(@RequestParam String keyword) {
         List<CarAdvertisement> cars = carAdvertisementRepository.findByNameContainingOrDescriptionContainingOrCarBrandContainingOrColorContainingOrGearTypeContaining(
                 keyword, keyword, keyword, keyword, keyword);
 
-        if (cars.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(cars, HttpStatus.OK);
+        List<GetCarDTO> carList = new ArrayList<>();
+
+        for (CarAdvertisement car : cars) {
+            List<byte[]> imageList = new ArrayList<>();
+            GetCarDTO returnedCar = new GetCarDTO();
+
+            returnedCar.setId(car.getId());
+            returnedCar.setName(car.getName());
+            returnedCar.setDescription(car.getDescription());
+            returnedCar.setPrice(car.getPrice());
+            returnedCar.setLicenseplate(car.getLicenseplate());
+            returnedCar.setCarBrand(car.getCarBrand());
+            returnedCar.setModelYear(car.getModelYear());
+            returnedCar.setBoughtYear(car.getBoughtYear());
+            returnedCar.setFuelType(car.getFuelType());
+            returnedCar.setFuelType(car.getFuelType());
+            returnedCar.setFuelConsumption(car.getFuelConsumption());
+            returnedCar.setCarType(car.getCarType());
+            returnedCar.setColor(car.getColor());
+            returnedCar.setGearType(car.getGearType());
+            returnedCar.setNumberOfGears(car.getNumberOfGears());
+            returnedCar.setActive(car.isActive());
+            returnedCar.setSeats(car.getSeats());
+            returnedCar.setEquipment(car.getEquipment());
+            returnedCar.setRules(car.getRules());
+            returnedCar.setRenting(car.isRenting());
+
+            for (CarImage image : car.getImages()) {
+                imageList.add(image.getSrc());
+            }
+
+            returnedCar.setImages(imageList);
+            carList.add(returnedCar);
         }
-    }
+
+            if (cars.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity<>(carList, HttpStatus.OK);
+            }
+        }
+
 
     @PostMapping("/sellcar/{userName}")
     public ResponseEntity<PostCarDTO> sellCar(@RequestBody PostCarDTO car, @PathVariable String userName) {
@@ -157,21 +193,37 @@ public class CarAdvertisementController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/rentcar")
-    public ResponseEntity<CarRentDTO> rentCar(@RequestBody CarRentDTO car) {
+    @PostMapping("/rentcar/{userName}")
+    public ResponseEntity<CarRentDTO> rentCar(@RequestBody CarRentDTO car, @PathVariable String userName) {
         System.out.println(car);
-        CarAdvertisement carAdvertisement = new CarAdvertisement();
-        carAdvertisement.setName(car.getName());
-        carAdvertisement.setDescription(car.getDescription());
-        carAdvertisement.setPrice(car.getPrice());
-        carAdvertisement.setCarBrand(car.getCarBrand());
-        carAdvertisement.setModelYear(car.getModelYear());
-        carAdvertisement.setGearType(car.getGearType());
-        carAdvertisement.setSeats(car.getSeats());
-        carAdvertisement.setEquipment(car.getEquipment());
-        carAdvertisement.setRules(car.getRules());
-        carAdvertisement.setRenting(true);
-        carAdvertisementRepository.save(carAdvertisement);
+
+        Optional<User> user = userRepository.findByUserName(userName);
+
+        if (user.isPresent()) {
+            User foundUser = user.get();
+            CarAdvertisement carAdvertisement = new CarAdvertisement();
+            carAdvertisement.setUser(foundUser);
+            carAdvertisement.setName(car.getName());
+            carAdvertisement.setDescription(car.getDescription());
+            carAdvertisement.setPrice(car.getPrice());
+            carAdvertisement.setCarBrand(car.getCarBrand());
+            carAdvertisement.setModelYear(car.getModelYear());
+            carAdvertisement.setGearType(car.getGearType());
+            carAdvertisement.setSeats(car.getSeats());
+            carAdvertisement.setEquipment(car.getEquipment());
+            carAdvertisement.setRules(car.getRules());
+            carAdvertisement.setRenting(true);
+
+            for (ImageDTO imageDTO : car.getImages()) {
+                CarImage carImage = new CarImage();
+                carImage.setSrc(imageDTO.getSrc());
+                carImage.setCarAdvertisement(carAdvertisement);
+                carAdvertisement.getImages().add(carImage);
+            }
+
+            carAdvertisementRepository.save(carAdvertisement);
+        }
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -245,20 +297,26 @@ public class CarAdvertisementController {
 
 
     @GetMapping("/check/{carId}/{userName}")
-        public ResponseEntity checkCarUserName(@PathVariable int carId, @PathVariable String userName) {
-            Optional<User> user = userRepository.findByUserName(userName);
-            Optional<CarAdvertisement> car = carAdvertisementRepository.findById(carId);
+    public ResponseEntity checkCarUserName(@PathVariable int carId, @PathVariable String userName) {
 
-            if (car.isPresent() && user.isPresent()) {
-                User foundUser = user.get();
-                CarAdvertisement foundCar = car.get();
-
-                if (foundCar.getUser().getId() != (foundUser.getId())) {
-                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-                }
-            }
-            return ResponseEntity.ok(car);
+        System.out.println(userName);
+        if (userName.equals("null")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+
+        Optional<User> user = userRepository.findByUserName(userName);
+        Optional<CarAdvertisement> car = carAdvertisementRepository.findById(carId);
+
+        if (car.isPresent() && user.isPresent()) {
+            User foundUser = user.get();
+            CarAdvertisement foundCar = car.get();
+
+            if (foundCar.getUser().getId() != (foundUser.getId())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+        }
+        return ResponseEntity.ok(car);
+    }
 
     @GetMapping("/list")
     public List<CarAdvertisement> get() {

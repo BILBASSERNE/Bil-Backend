@@ -39,15 +39,33 @@ public class FavoriteCarService {
         }
     }
 
-    public Set<CarAdvertisement> getFavoriteCarsByUserName(String userName) {
-        return carAdvertisementRepository.findFavoriteCarsByUserName(userName);
+    public List<GetCarDTO> getFavoriteCarsByUserName(String userName) {
+        Set<CarAdvertisement> favoriteCars = carAdvertisementRepository.findFavoriteCarsByUserName(userName);
+        List<GetCarDTO> listOfCars = new ArrayList<>();
+
+        for (CarAdvertisement car : favoriteCars) {
+            List<byte[]> imageList = new ArrayList<>();
+
+            for (CarImage image : car.getImages()) {
+                imageList.add(image.getSrc());
+            }
+
+            GetCarDTO carDTO = new GetCarDTO();
+            carDTO.setId(car.getId());
+            carDTO.setImages(imageList);
+            carDTO.setName(car.getName());
+            carDTO.setPrice(car.getPrice());
+
+            listOfCars.add(carDTO);
+
+        }
+        return listOfCars;
     }
 
 
     public List<GetCarDTO> getMyAdvertisedCars(String userName) {
         List<CarAdvertisement> myAdvertisedCars = carAdvertisementRepository.findAllByUser_UserName(userName);
         List<GetCarDTO> listOfCars = new ArrayList<>();
-        System.out.println(myAdvertisedCars);
 
         for (CarAdvertisement car : myAdvertisedCars) {
             List<byte[]> imageList = new ArrayList<>();
@@ -57,6 +75,7 @@ public class FavoriteCarService {
             }
 
             GetCarDTO carDTO = new GetCarDTO();
+            carDTO.setId(car.getId());
             carDTO.setImages(imageList);
             carDTO.setName(car.getName());
             carDTO.setPrice(car.getPrice());
